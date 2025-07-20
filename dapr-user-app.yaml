@@ -1,0 +1,41 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: user-app-service
+  namespace: default
+spec:
+  type: service
+  version: v1
+  metadata:
+  - name: app-id
+    value: user-app-service
+  - name: app-port
+    value: "8088"
+  - name: app-protocol
+    value: http
+  - name: app-ssl
+    value: "false"
+---
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: user-app-service-config
+  namespace: default
+spec:
+  tracing:
+    samplingRate: "1"
+    zipkin:
+      endpointAddress: "http://localhost:9411/api/v2/spans"
+  httpPipeline:
+    handlers:
+    - name: observability
+      type: middleware.http.observability
+    - name: cors
+      type: middleware.http.cors
+  features:
+  - name: ServiceInvocation
+    enabled: true
+  - name: StateManagement
+    enabled: false
+  - name: PubSub
+    enabled: false 
