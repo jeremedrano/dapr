@@ -21,7 +21,7 @@ public class PokemonClient {
     static {
         LOG.info("=== INICIALIZACIÓN: PokemonClient class ===");
         LOG.info("PokemonClient cargado en memoria");
-        LOG.info("URL del Pokemon Service: {}", POKEMON_SERVICE_URL);
+        LOG.info("URL del Pokemon Service: " + POKEMON_SERVICE_URL);
         LOG.info("=== FIN INICIALIZACIÓN: PokemonClient ===");
     }
     
@@ -45,7 +45,7 @@ public class PokemonClient {
         
         try {
             String url = POKEMON_SERVICE_URL + "/pokemon/random";
-            LOG.info("URL de destino: {}", url);
+            LOG.info("URL de destino: " + url);
             
             LOG.info("Creando HttpRequest...");
             HttpRequest request = HttpRequest.newBuilder()
@@ -59,17 +59,17 @@ public class PokemonClient {
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             long endTime = System.currentTimeMillis();
             
-            LOG.info("Response recibido - Status: {}, Tiempo: {} ms", response.statusCode(), (endTime - startTime));
-            LOG.debug("Response body: {}", response.body());
+            LOG.info("Response recibido - Status: " + response.statusCode() + ", Tiempo: " + (endTime - startTime) + " ms");
+            LOG.debug("Response body: " + response.body());
             
             if (response.statusCode() == 200) {
                 LOG.info("Deserializando response JSON a objeto Pokemon...");
                 Pokemon pokemon = objectMapper.readValue(response.body(), Pokemon.class);
-                LOG.info("Pokemon deserializado exitosamente: {}", pokemon.getName());
+                LOG.info("Pokemon deserializado exitosamente: " + pokemon.getName());
                 LOG.info("=== FIN MÉTODO: getRandomPokemon() (SUCCESS) ===");
                 return pokemon;
             } else {
-                LOG.error("Pokemon service retornó status code: {}", response.statusCode());
+                LOG.error("Pokemon service retornó status code: " + response.statusCode());
                 throw new RuntimeException("Pokemon service returned status: " + response.statusCode());
             }
         } catch (Exception e) {

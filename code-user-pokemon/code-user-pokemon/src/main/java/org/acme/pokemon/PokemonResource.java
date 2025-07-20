@@ -36,8 +36,8 @@ public class PokemonResource {
         Pokemon pokemon = Pokemon.getRandomPokemon();
         long endTime = System.currentTimeMillis();
         
-        LOG.info("Pokemon aleatorio obtenido: {}", pokemon.getName());
-        LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
+        LOG.info("Pokemon aleatorio obtenido: " + pokemon.getName());
+        LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
         LOG.info("=== FIN ENDPOINT: GET /pokemon/random ===");
         
         return pokemon;
@@ -47,22 +47,22 @@ public class PokemonResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPokemonById(@PathParam("id") int id) {
-        LOG.info("=== ENDPOINT LLAMADO: GET /pokemon/{} ===", id);
-        LOG.info("Iniciando proceso para obtener Pokemon con ID: {}", id);
+        LOG.info("=== ENDPOINT LLAMADO: GET /pokemon/" + id + " ===");
+        LOG.info("Iniciando proceso para obtener Pokemon con ID: " + id);
         
         long startTime = System.currentTimeMillis();
         Pokemon pokemon = Pokemon.getPokemonById(id);
         long endTime = System.currentTimeMillis();
         
         if (pokemon != null) {
-            LOG.info("Pokemon encontrado: {} (ID: {})", pokemon.getName(), id);
-            LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
-            LOG.info("=== FIN ENDPOINT: GET /pokemon/{} (SUCCESS) ===", id);
+            LOG.info("Pokemon encontrado: " + pokemon.getName() + " (ID: " + id + ")");
+            LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
+            LOG.info("=== FIN ENDPOINT: GET /pokemon/" + id + " (SUCCESS) ===");
             return Response.ok(pokemon).build();
         } else {
-            LOG.warn("Pokemon no encontrado con ID: {}", id);
-            LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
-            LOG.info("=== FIN ENDPOINT: GET /pokemon/{} (NOT_FOUND) ===", id);
+            LOG.warn("Pokemon no encontrado con ID: " + id);
+            LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
+            LOG.info("=== FIN ENDPOINT: GET /pokemon/" + id + " (NOT_FOUND) ===");
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Pokemon with ID " + id + " not found")
                     .build();
@@ -80,9 +80,9 @@ public class PokemonResource {
         List<Pokemon> pokemons = Pokemon.getAllPokemons();
         long endTime = System.currentTimeMillis();
         
-        LOG.info("Lista de Pokemons obtenida: {} Pokemons", pokemons.size());
-        LOG.info("Pokemons en la lista: {}", pokemons.stream().map(Pokemon::getName).toList());
-        LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
+        LOG.info("Lista de Pokemons obtenida: " + pokemons.size() + " Pokemons");
+        LOG.info("Pokemons en la lista: " + pokemons.stream().map(Pokemon::getName).toList());
+        LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
         LOG.info("=== FIN ENDPOINT: GET /pokemon/list ===");
         
         return pokemons;
@@ -99,8 +99,8 @@ public class PokemonResource {
         String response = "Hello from Pokemon Service!";
         long endTime = System.currentTimeMillis();
         
-        LOG.info("Respuesta enviada: {}", response);
-        LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
+        LOG.info("Respuesta enviada: " + response);
+        LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
         LOG.info("=== FIN ENDPOINT: GET /pokemon/hello ===");
         
         return response;

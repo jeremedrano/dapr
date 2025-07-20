@@ -41,8 +41,8 @@ public class UserResource {
         String response = "Hello from User App Service!";
         long endTime = System.currentTimeMillis();
         
-        LOG.info("Respuesta enviada: {}", response);
-        LOG.info("Tiempo de respuesta: {} ms", (endTime - startTime));
+        LOG.info("Respuesta enviada: " + response);
+        LOG.info("Tiempo de respuesta: " + (endTime - startTime) + " ms");
         LOG.info("=== FIN ENDPOINT: GET /users/hello ===");
         
         return response;
@@ -59,8 +59,8 @@ public class UserResource {
         Pokemon pokemon = pokemonClient.getRandomPokemon();
         long endTime = System.currentTimeMillis();
         
-        LOG.info("Pokemon aleatorio obtenido: {}", pokemon.getName());
-        LOG.info("Tiempo total de respuesta: {} ms", (endTime - startTime));
+        LOG.info("Pokemon aleatorio obtenido: " + pokemon.getName());
+        LOG.info("Tiempo total de respuesta: " + (endTime - startTime) + " ms");
         LOG.info("=== FIN ENDPOINT: GET /users/pokemon ===");
         
         return pokemon;
