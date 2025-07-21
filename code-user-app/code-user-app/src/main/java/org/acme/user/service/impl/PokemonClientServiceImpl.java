@@ -79,4 +79,20 @@ public class PokemonClientServiceImpl implements PokemonClientService {
         
         return response;
     }
+
+    @Override
+    public List<Pokemon> getAllPokemonsGrpc() {
+        LOG.info("=== EXTERNAL SERVICE: getAllPokemonsGrpc() ===");
+        LOG.info("Iniciando proceso para obtener lista de Pokemons via DAPR gRPC desde Pokemon Service");
+        
+        long startTime = System.currentTimeMillis();
+        List<Pokemon> pokemons = pokemonClient.getAllPokemonsGrpc();
+        long endTime = System.currentTimeMillis();
+        
+        LOG.info("Lista de Pokemons obtenida via gRPC: " + pokemons.size() + " Pokemons");
+        LOG.info("Tiempo de respuesta gRPC: " + (endTime - startTime) + " ms");
+        LOG.info("=== FIN EXTERNAL SERVICE: getAllPokemonsGrpc() ===");
+        
+        return pokemons;
+    }
 } 

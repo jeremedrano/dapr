@@ -262,6 +262,24 @@ public class UserResource {
     }
 
     @GET
+    @Path("/pokemon/list/grpc")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Pokemon> getAllPokemonsGrpc() {
+        LOG.info("=== ENDPOINT LLAMADO: GET /users/pokemon/list/grpc ===");
+        LOG.info("Iniciando proceso para obtener lista de Pokemons via DAPR gRPC desde Pokemon Service");
+        
+        long startTime = System.currentTimeMillis();
+        List<Pokemon> pokemons = pokemonClientService.getAllPokemonsGrpc();
+        long endTime = System.currentTimeMillis();
+        
+        LOG.info("Lista de Pokemons obtenida via gRPC: " + pokemons.size() + " Pokemons");
+        LOG.info("Tiempo de respuesta gRPC: " + (endTime - startTime) + " ms");
+        LOG.info("=== FIN ENDPOINT: GET /users/pokemon/list/grpc ===");
+        
+        return pokemons;
+    }
+
+    @GET
     @Path("/pokemon-service/hello")
     @Produces(MediaType.TEXT_PLAIN)
     public String getPokemonServiceHello() {

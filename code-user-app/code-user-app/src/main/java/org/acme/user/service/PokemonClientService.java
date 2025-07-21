@@ -29,4 +29,10 @@ public interface PokemonClientService {
      * @return Saludo del servicio
      */
     String getPokemonServiceHello();
+    
+    /**
+     * Obtiene todos los Pokemons desde el Pokemon Service usando DAPR gRPC
+     * @return Lista de todos los Pokemons
+     */
+    List<Pokemon> getAllPokemonsGrpc();
 } 

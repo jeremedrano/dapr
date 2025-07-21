@@ -13,6 +13,7 @@ import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
 import io.dapr.client.domain.HttpExtension;
 import io.dapr.client.domain.Metadata;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -354,6 +355,91 @@ public class PokemonClient {
             LOG.error("     * Problemas de red entre servicios");
             
             throw new RuntimeException("Error comunicándose con Pokemon Service a través de DAPR", e);
+        }
+    }
+    
+    public List<org.acme.user.domain.Pokemon> getAllPokemonsGrpc() {
+        LOG.info("=== MÉTODO LLAMADO: getAllPokemonsGrpc() ===");
+        LOG.info("🚀 INICIANDO COMUNICACIÓN DAPR gRPC CON POKEMON SERVICE");
+        LOG.info("   Objetivo: Obtener todos los Pokemons usando DAPR con puerto gRPC");
+        
+        try {
+            LOG.info("🔧 PASO 1: Configurando puerto gRPC DAPR...");
+            LOG.info("   - Puerto gRPC configurado: 50003");
+            LOG.info("   - Configurando variable de entorno DAPR_GRPC_PORT");
+            System.setProperty("DAPR_GRPC_PORT", "50003");
+            
+            LOG.info("🔧 PASO 2: Preparando DAPR Service Invocation via gRPC...");
+            LOG.info("   - App ID destino: " + POKEMON_SERVICE_APP_ID);
+            LOG.info("   - Método HTTP: GET");
+            LOG.info("   - Endpoint: /pokemon/list");
+            LOG.info("   - Protocolo: DAPR gRPC (puerto 50003)");
+            LOG.info("   - DAPR manejará automáticamente:");
+            LOG.info("     * Service Discovery (encontrar el servicio)");
+            LOG.info("     * Load Balancing (si hay múltiples instancias)");
+            LOG.info("     * Retry Logic (reintentos automáticos)");
+            LOG.info("     * Circuit Breaker (protección contra fallos)");
+            LOG.info("     * Comunicación gRPC entre sidecars");
+            
+            LOG.info("🔧 PASO 3: Preparando llamada DAPR gRPC...");
+            LOG.info("   - DAPR creará un request que será enviado al sidecar DAPR via gRPC");
+            LOG.info("   - El sidecar DAPR se encargará de la comunicación gRPC real");
+            
+            LOG.info("🔧 PASO 4: Enviando request a través de DAPR gRPC...");
+            LOG.info("   - DaprClient enviará el request al sidecar DAPR local via gRPC");
+            LOG.info("   - Sidecar DAPR buscará el pokemon-service usando service discovery");
+            LOG.info("   - Sidecar DAPR enviará el request HTTP al pokemon-service");
+            LOG.info("   - Sidecar DAPR recibirá la respuesta y la devolverá via gRPC");
+            
+            long startTime = System.currentTimeMillis();
+            
+            // Usar el método correcto de DAPR para arrays JSON via gRPC
+            LOG.info("🔧 PASO 5: Usando DAPR gRPC con Object.class y cast...");
+            Object response = daprClient.invokeMethod(
+                POKEMON_SERVICE_APP_ID, 
+                "pokemon/list", 
+                null, 
+                HttpExtension.GET, 
+                Object.class
+            ).block();
+            
+            LOG.info("🔧 PASO 6: Deserializando respuesta usando ObjectMapper...");
+            String jsonResponse = objectMapper.writeValueAsString(response);
+            List<org.acme.user.domain.Pokemon> pokemons = objectMapper.readValue(
+                jsonResponse, 
+                new TypeReference<List<org.acme.user.domain.Pokemon>>() {}
+            );
+            
+            long endTime = System.currentTimeMillis();
+            
+            LOG.info("✅ RESPUESTA DAPR gRPC RECIBIDA DEL POKEMON SERVICE");
+            LOG.info("   - Protocolo usado: DAPR gRPC (puerto 50003)");
+            LOG.info("   - Pokemons obtenidos: " + pokemons.size());
+            LOG.info("   - Tiempo de respuesta: " + (endTime - startTime) + " ms");
+            
+            LOG.info("✅ Lista de Pokemons deserializada: " + pokemons.size() + " Pokemons");
+            LOG.info("   - Tiempo total: " + (endTime - startTime) + " ms");
+            
+            LOG.info("🎉 COMUNICACIÓN DAPR gRPC EXITOSA");
+            LOG.info("   - Protocolo: DAPR gRPC (más eficiente que HTTP directo)");
+            LOG.info("   - Pokemons obtenidos: " + pokemons.size());
+            LOG.info("   - Nombres: " + pokemons.stream().map(org.acme.user.domain.Pokemon::getName).toList());
+            
+            LOG.info("=== FIN MÉTODO: getAllPokemonsGrpc() ===");
+            return pokemons;
+            
+        } catch (Exception e) {
+            LOG.error("❌ ERROR EN COMUNICACIÓN DAPR gRPC CON POKEMON SERVICE");
+            LOG.error("   - Error: " + e.getMessage());
+            LOG.error("   - Stack trace: ", e);
+            LOG.error("   - DAPR no pudo comunicarse con el pokemon-service via gRPC");
+            LOG.error("   - Posibles causas:");
+            LOG.error("     * pokemon-service no está ejecutándose");
+            LOG.error("     * DAPR sidecar no está configurado correctamente");
+            LOG.error("     * Problemas de red entre servicios");
+            LOG.error("     * Puerto gRPC no configurado correctamente");
+            
+            throw new RuntimeException("Error comunicándose con Pokemon Service a través de DAPR gRPC", e);
         }
     }
 } 
