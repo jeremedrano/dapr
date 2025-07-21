@@ -1,4 +1,4 @@
-package org.acme.user;
+package org.acme.user.domain;
 
 import java.util.List;
 
